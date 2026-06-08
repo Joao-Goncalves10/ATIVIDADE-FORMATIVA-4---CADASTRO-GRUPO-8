@@ -1,0 +1,271 @@
+/* ==========================================================
+   PEDIDOS.CSS — Estilos da página de Pedidos (pedidos.html)
+   Aula 8: entregue pronto — o live code foca no pedidos.js
+   ========================================================== */
+
+/* ── Seção principal ─────────────────────────────────────── */
+#secao-pedidos {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ── Topo site ─────────────────────────────────── */
+#topo-loja{
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-mid) 100%);
+    color: var(--brand-light);
+    padding: 24px 18px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    animation: slideDown 0.6s ease-out;
+}
+
+#topo-loja h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+#boas-vindas {
+    font-size: 1.1rem;
+    font-weight: 500;
+    opacity: 0.95;
+    letter-spacing: 0.5px;
+}
+
+#bt_menu, #label-menu {
+    display: none;
+}
+
+#menu ul{
+    list-style: none;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+#menu li{
+    display: inline-block;
+    margin: 5px;
+}
+
+#menu a{
+    color: #feecd7;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+}
+
+#menu a:hover{
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    border-color: #feecd7;
+    box-shadow: 0 5px 15px rgba(255, 198, 198, 0.3);
+}
+
+
+.titulo-secao{
+    text-align: center;
+    margin-top: 48px;
+    margin-bottom: 32px;
+    color: var(--brand-dark);
+    font-size: 1.8rem;
+    font-weight: 700;
+    position: relative;
+    letter-spacing: 0.5px;
+}
+
+.titulo-secao::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #990404, #86401b);
+    margin: 15px auto 0;
+    border-radius: 2px;
+    animation: expandWidth 0.6s ease-out;
+}
+
+@keyframes expandWidth {
+    from { width: 0; }
+    to { width: 80px; }
+}
+
+/* ── Resumo rápido no topo ───────────────────────────────── */
+#resumo-pedidos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #faf9f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+#resumo-pedidos #valor-total-resumo {
+  font-weight: bold;
+  color: #e67e22;
+  font-size: 1rem;
+}
+
+/* ── Lista de pedidos ────────────────────────────────────── */
+#lista-pedidos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.item-pedido {
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.95rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.item-pedido:last-child {
+  border-bottom: none;
+}
+
+.item-pedido:hover {
+  background: #fafafa;
+}
+
+/* Botão ✕ remover item individual — Aula 7 → Aula 8
+   Na Aula 7 removia do DOM diretamente.
+   Aqui remove do localStorage e re-renderiza. */
+.btn-remover-item {
+  background: none;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.btn-remover-item:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.subtotal-item {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.pedido-vazio {
+  padding: 30px 20px;
+  text-align: center;
+  color: #f9925f;
+  font-style: italic;
+}
+
+.pedido-vazio a {
+  color: #e67e22;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.pedido-vazio a:hover {
+  text-decoration: underline;
+}
+
+/* ── Total geral e botões ────────────────────────────────── */
+#total-pedidos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 2px solid #e0e0e0;
+}
+
+#total-pedidos strong {
+  font-size: 1.1rem;
+  color: var(--brand-dark);
+}
+
+#valor-total {
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.btn-pedidos-grupo {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-limpar-pedidos {
+  background: none;
+  border: 2px solid var(--danger);
+  color: var(--danger);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: bold;
+  transition: all 0.15s;
+}
+
+.btn-limpar-pedidos:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-voltar-cardapio {
+  background: var(--brand-mid);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: bold;
+  transition: 0.15s;
+}
+
+.btn-voltar-cardapio:hover {
+  background: var(--brand-dark);
+}
+
+/* ── Responsivo ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  #total-pedidos {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-pedidos-grupo {
+    width: 100%;
+  }
+
+  .btn-limpar-pedidos,
+  .btn-voltar-cardapio {
+    width: 100%;
+    text-align: center;
+  }
+}
