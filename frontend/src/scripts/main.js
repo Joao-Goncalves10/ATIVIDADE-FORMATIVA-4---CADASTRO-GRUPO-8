@@ -253,14 +253,14 @@ async function salvarPedido(produtoId, quantidade, botao) {
 async function atualizarContadorPedidos() {
   try {
     var resposta = await buscarPedidos(); // api.js — GET /pedidos
-    var pedidos = resposta.dados || resposta;
+    var pedidos = resposta && resposta.dados ? resposta.dados : resposta;
+    if (!Array.isArray(pedidos)) pedidos = [];
     var total = pedidos.reduce(function (acc, p) {
-      // soma as quantidades de todos os itens de todos os pedidos
-      if (p.itens)
+      if (p && Array.isArray(p.itens))
         return (
           acc +
           p.itens.reduce(function (a, i) {
-            return a + i.quantidade;
+            return a + Number(i.quantidade || 0);
           }, 0)
         );
       return acc + 1;

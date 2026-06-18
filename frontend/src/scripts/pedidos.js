@@ -27,11 +27,14 @@ async function renderizarPedidos() {
   try {
     // buscarPedidos() no api.js — GET /pedidos
     var resposta = await buscarPedidos();
-    var pedidos = resposta.dados || resposta;
+    var pedidos = resposta && resposta.dados ? resposta.dados : resposta;
+    if (!Array.isArray(pedidos)) pedidos = [];
 
-    if (!pedidos || pedidos.length === 0) {
+    if (pedidos.length === 0) {
       lista.innerHTML = "<li class='pedido-vazio'>Nenhum pedido ainda. 😊</li>";
       if (spanTotal) spanTotal.textContent = "R$ 0,00";
+      if (spanResumoItens) spanResumoItens.textContent = "0 itens";
+      if (spanResumoTotal) spanResumoTotal.textContent = "R$ 0,00";
       return;
     }
 
@@ -40,34 +43,38 @@ async function renderizarPedidos() {
     var totalItens = 0;
 
     pedidos.forEach(function (pedido) {
-      // createElement — Aula 7: cria o item do pedido
+      var statusPedido = pedido && pedido.status ? pedido.status : "pendente";
+      var totalPedido = parseFloat(pedido && pedido.total ? pedido.total : 0) || 0;
+
       var li = document.createElement("li");
-      // status-pendente / status-preparo / status-pronto / status-entregue
-      li.classList.add("item-pedido", "status-" + pedido.status);
+      li.classList.add("item-pedido", "status-" + statusPedido);
 
       li.innerHTML =
         "<div class='pedido-info'>" +
         "<strong>#" +
-        pedido.id +
+        (pedido.id || "-") +
         " — " +
-        (pedido.cliente || "Cliente") +
+        ((pedido && pedido.cliente) || "Cliente") +
         "</strong>" +
         "<span class='pedido-total'>R$ " +
-        parseFloat(pedido.total).toFixed(2).replace(".", ",") +
+        totalPedido.toFixed(2).replace(".", ",") +
         "</span>" +
         "</div>" +
         "<div class='pedido-status'>" +
         "<span class='badge-status badge-" +
-        pedido.status +
+        statusPedido +
         "'>" +
-        pedido.status.toUpperCase() +
+        statusPedido.toUpperCase() +
         "</span>" +
-        gerarBotaoStatus(pedido.id, pedido.status) +
+        gerarBotaoStatus(pedido.id, statusPedido) +
+        "<button class='btn-excluir-pedido' onclick='confirmarExclusao(" +
+        pedido.id +
+        ")'>Excluir</button>" +
         "</div>";
 
       lista.appendChild(li);
-      totalGeral += parseFloat(pedido.total || 0);
-      if (pedido.itens) {
+      totalGeral += totalPedido;
+      if (pedido && Array.isArray(pedido.itens)) {
         totalItens += pedido.itens.reduce(function (acc, item) {
           return acc + Number(item.quantidade || 0);
         }, 0);
@@ -131,11 +138,21 @@ function gerarBotaoStatus(pedidoId, statusAtual) {
 // ─────────────────────────────────────────────────────────────────────────────
 async function avancarStatus(pedidoId, novoStatus) {
   try {
-    // atualizarStatusPedido() no api.js — PATCH /pedidos/:id/status
     await atualizarStatusPedido(pedidoId, novoStatus);
-    // Re-renderiza o painel após atualizar
     renderizarPedidos();
   } catch (erro) {
     alert("Erro ao atualizar status: " + erro.message);
   }
+}
+
+function confirmarExclusao(pedidoId) {
+  var confirmado = window.confirm("Deseja realmente excluir este pedido?");
+  if (!confirmado) return;
+  excluirPedido(pedidoId)
+    .then(function () {
+      renderizarPedidos();
+    })
+    .catch(function (erro) {
+      alert("Erro ao excluir pedido: " + erro.message);
+    });
 }
