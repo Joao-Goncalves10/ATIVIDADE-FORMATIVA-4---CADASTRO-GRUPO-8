@@ -24,20 +24,23 @@ class ProdutoService {
     async cadastrarProduto(dados) {
         const { nome, descricao, preco, categoria, disponivel, foto } = dados;
 
-        if (!nome || !descricao || preco === undefined) {
+        const precoConvertido = typeof preco === 'string' ? parseFloat(preco.replace(',', '.')) : preco;
+        const disponivelConvertido = disponivel === 'false' || disponivel === false ? false : true;
+
+        if (!nome || !descricao || precoConvertido === undefined) {
             throw { status: 400, mensagem: "Nome, descrição e preço são obrigatórios" };
         }
 
-        if (typeof preco !== "number" || preco <= 0) {
+        if (typeof precoConvertido !== "number" || Number.isNaN(precoConvertido) || precoConvertido <= 0) {
             throw { status: 400, mensagem: "Preço deve ser um número positivo" };
         }
 
         const novoProduto = {
             nome: nome.trim(),
             descricao: descricao.trim(),
-            preco,
+            preco: precoConvertido,
             categoria: categoria || null,
-            disponivel: disponivel ?? true,
+            disponivel: disponivelConvertido,
             foto: foto || null
         };
 
@@ -66,13 +69,16 @@ class ProdutoService {
         if (nome !== undefined) atualizado.nome = nome.trim();
         if (descricao !== undefined) atualizado.descricao = descricao.trim();
         if (preco !== undefined) {
-            if (typeof preco !== "number" || preco <= 0) {
+            const precoConvertido = typeof preco === 'string' ? parseFloat(preco.replace(',', '.')) : preco;
+            if (typeof precoConvertido !== "number" || Number.isNaN(precoConvertido) || precoConvertido <= 0) {
                 throw { status: 400, mensagem: "Preço deve ser um número positivo" };
             }
-            atualizado.preco = preco;
+            atualizado.preco = precoConvertido;
         }
         if (categoria !== undefined) atualizado.categoria = categoria;
-        if (disponivel !== undefined) atualizado.disponivel = disponivel;
+        if (disponivel !== undefined) {
+            atualizado.disponivel = disponivel === 'false' || disponivel === false ? false : true;
+        }
 
         if (Object.keys(atualizado).length === 0) {
             throw { status: 400, mensagem: "Nenhum dado válido enviado para atualização" };

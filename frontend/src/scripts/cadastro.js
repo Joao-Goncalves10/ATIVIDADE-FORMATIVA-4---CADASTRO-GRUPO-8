@@ -110,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
       atualizarPreview(null);
     } catch (erro) {
       console.error('Erro ao cadastrar prato:', erro);
-      exibirMensagem('Falha ao conectar ao servidor. Verifique se o backend está rodando.', 'erro');
+      const mensagem = erro.message || 'Falha ao conectar ao servidor. Verifique se o backend está rodando.';
+      exibirMensagem(mensagem, 'erro');
     }
   });
 });
