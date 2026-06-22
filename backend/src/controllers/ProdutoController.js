@@ -6,11 +6,14 @@ class ProdutoController {
             const produtos = await ProdutoService.listarProdutos();
             const produtosArray = Array.isArray(produtos) ? produtos : produtos?.dados || [];
             const produtosComUrl = produtosArray.map(produto => {
+                const urlFoto = produto.foto ? `http://localhost:3000/uploads/${produto.foto}` : null;
                 return {
                     ...produto,
-                    foto: produto.foto ? `http://localhost:3000/uploads/${produto.foto}` : null
-                }
-            })
+                    produto_id: produto.id,
+                    foto: urlFoto,
+                    imagem: produto.imagem || urlFoto || null
+                };
+            });
             res.json(produtosComUrl);
         } catch (erro) {
             res.status(erro.status || 500).json({
