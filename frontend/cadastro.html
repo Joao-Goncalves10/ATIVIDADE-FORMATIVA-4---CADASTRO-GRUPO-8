@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/styles/global.css" />
     <link rel="stylesheet" href="src/styles/style.css" />
+    <link rel="stylesheet" href="src/styles/cadastro.css" />
     <title>TechFood - Cadastrar Prato</title>
   </head>
   <body>
@@ -27,9 +28,58 @@
     <main>
       <section id="secao-cadastro">
         <h2 class="titulo-secao">Cadastrar Prato</h2>
-        <div class="card">
-          <p>Esta página ainda está em desenvolvimento. Em breve você poderá cadastrar pratos diretamente no site.</p>
-          <p class="desc">Enquanto isso, use o Cardápio para ver os pratos e a seção Meus Pedidos para acompanhar suas escolhas.</p>
+        <div class="card card-cadastro">
+          <p class="desc">Use o formulário abaixo para cadastrar um novo prato no sistema TechFood. Os campos marcados com * são obrigatórios.</p>
+
+          <form id="form-cadastro" class="form-cadastro" enctype="multipart/form-data" novalidate>
+            <div class="form-group">
+              <label for="nome-prato">Nome do prato *</label>
+              <input type="text" id="nome-prato" name="nome" class="input-field" placeholder="Ex: Lasanha à Bolonhesa" required />
+            </div>
+
+            <div class="form-group">
+              <label for="descricao-prato">Descrição *</label>
+              <textarea id="descricao-prato" name="descricao" class="textarea-field" placeholder="Descreva os ingredientes e o sabor do prato" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="preco-prato">Preço (R$) *</label>
+              <input type="number" id="preco-prato" name="preco" class="input-field" placeholder="Ex: 28.50" step="0.01" min="0.01" required />
+            </div>
+
+            <div class="form-group">
+              <label for="categoria-prato">Categoria *</label>
+              <select id="categoria-prato" name="categoria" class="select-field" required>
+                <option value="">Selecione uma categoria</option>
+                <option value="Massa">Massa</option>
+                <option value="Pizza">Pizza</option>
+                <option value="Bebida">Bebida</option>
+                <option value="Sobremesa">Sobremesa</option>
+                <option value="Salada">Salada</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="foto-prato">Foto do prato</label>
+              <input type="file" id="foto-prato" name="foto" class="file-field" accept="image/*" />
+              <span class="info-dica">Envie uma imagem para deixar seu prato mais atrativo no cardápio.</span>
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="disponivel-prato" name="disponivel" />
+                Prato disponível para pedidos
+              </label>
+            </div>
+
+            <div id="preview-container"></div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-pedido btn-cadastro">Cadastrar prato</button>
+            </div>
+
+            <p class="mensagem-resultado" id="mensagem-cadastro"></p>
+          </form>
         </div>
       </section>
     </main>
@@ -42,7 +92,9 @@
       </div>
       <p id="data-hora-footer"></p>
     </footer>
-
+    
     <script src="src/scripts/global.js"></script>
+    <script src="src/scripts/api.js"></script>
+    <script src="src/scripts/cadastro.js"></script>
   </body>
 </html>

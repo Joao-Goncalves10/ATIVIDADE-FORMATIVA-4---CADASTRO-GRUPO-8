@@ -214,6 +214,80 @@
   font-size: 1.2rem;
 }
 
+.btn-status {
+  background: linear-gradient(135deg, #86401b, #c05a11);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+.btn-excluir-pedido {
+  background: transparent;
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
+.btn-excluir-pedido:hover {
+  background: #e74c3c;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-status:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(134, 64, 27, 0.25);
+  background: linear-gradient(135deg, #9b4d16, #d26a1a);
+}
+
+.btn-status:active {
+  transform: translateY(0);
+}
+
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-pendente {
+  background: rgba(243, 156, 18, 0.15);
+  color: #d68910;
+}
+
+.badge-preparo {
+  background: rgba(52, 152, 219, 0.15);
+  color: #217dbb;
+}
+
+.badge-pronto {
+  background: rgba(46, 204, 113, 0.15);
+  color: #1f8a4a;
+}
+
+.badge-entregue {
+  background: rgba(46, 204, 113, 0.25);
+  color: #15803d;
+}
+
 .btn-pedidos-grupo {
   display: flex;
   gap: 10px;

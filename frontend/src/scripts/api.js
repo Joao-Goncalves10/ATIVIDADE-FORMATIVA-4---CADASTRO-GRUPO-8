@@ -154,7 +154,8 @@ async function buscarPedidos() {
     const response = await fetch(`${BASE_URL}/pedidos`);
     const dados = await response.json();
     if (!response.ok) throw new Error(dados.erro || `Erro: ${response.status}`);
-    var pedidosServico = dados.dados || dados;
+    var pedidosServico = dados && Array.isArray(dados.dados) ? dados.dados : dados;
+    if (!Array.isArray(pedidosServico)) pedidosServico = [];
     return mesclarPedidosLocais(pedidosServico, pedidosLocais);
   } catch (err) {
     console.warn("buscarPedidos: backend indisponível, retornando pedidos locais", err);
@@ -175,7 +176,7 @@ async function atualizarStatusPedido(id, novoStatus) {
     const response = await fetch(`${BASE_URL}/pedidos/${id}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ novoStatus: novoStatus }),
+      body: JSON.stringify({ status: novoStatus }),
     });
     const dados = await response.json();
     if (!response.ok)
@@ -191,5 +192,24 @@ async function atualizarStatusPedido(id, novoStatus) {
     pedido.status = novoStatus;
     salvarPedidosLocais(pedidos);
     return pedido;
+  }
+}
+
+async function excluirPedido(id) {
+  try {
+    const response = await fetch(`${BASE_URL}/pedidos/${id}`, {
+      method: "DELETE",
+    });
+    const dados = await response.json();
+    if (!response.ok) throw new Error(dados.erro || `Erro: ${response.status}`);
+    return dados;
+  } catch (err) {
+    console.warn("excluirPedido: backend indisponível, removendo pedido local", err);
+    var pedidos = carregarPedidosLocais();
+    var novosPedidos = pedidos.filter(function (p) {
+      return Number(p.id) !== Number(id);
+    });
+    salvarPedidosLocais(novosPedidos);
+    return { mensagem: "Pedido removido localmente." };
   }
 }
