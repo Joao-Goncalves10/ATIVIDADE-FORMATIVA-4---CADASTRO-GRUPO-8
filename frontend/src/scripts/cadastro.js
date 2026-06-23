@@ -95,19 +95,23 @@ document.addEventListener('DOMContentLoaded', () => {
     exibirMensagem('Enviando o prato para o servidor...', 'sucesso');
 
     try {
-      const response = await fetch('http://localhost:3000/produtos', {
+      const response = await fetch(`${BASE_URL}/produtos`, {
         method: 'POST',
         body: formData,
       });
 
       const resultado = await response.json();
       if (!response.ok) {
-        throw new Error(resultado.erro || 'Erro ao cadastrar o prato.');
+        throw new Error(resultado.mensagem || resultado.erro || 'Erro ao cadastrar o prato.');
       }
 
-      exibirMensagem('Prato cadastrado com sucesso! 🎉', 'sucesso');
+      exibirMensagem('Prato cadastrado com sucesso! 🎉 Voltando ao cardápio...', 'sucesso');
       formCadastro.reset();
       atualizarPreview(null);
+
+      setTimeout(function () {
+        window.location.href = 'index.html';
+      }, 1500);
     } catch (erro) {
       console.error('Erro ao cadastrar prato:', erro);
       const mensagem = erro.message || 'Falha ao conectar ao servidor. Verifique se o backend está rodando.';

@@ -1,5 +1,8 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+const path = require('path');
+// Carrega o .env na raiz do backend para garantir variáveis mesmo quando
+// o processo é iniciado a partir de src/ (cwd diferente).
+require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 
 // Pool de conexões com MySQL usando Promises
 const pool = mysql.createPool({

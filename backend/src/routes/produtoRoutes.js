@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const ProdutoController = require('../controllers/ProdutoController');
+// Permite ativar um modo de desenvolvimento sem MySQL definindo DEV_MOCK=true
+const ProdutoController = process.env.DEV_MOCK === 'true'
+  ? require('../controllers/MockProdutoController')
+  : require('../controllers/ProdutoController');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

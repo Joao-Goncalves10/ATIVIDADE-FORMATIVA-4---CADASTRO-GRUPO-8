@@ -1,22 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   renderizarPedidos();
-  // setInterval: executa a função repetidamente a cada 30 segundos.
-  // Novos pedidos aparecem no painel sem precisar recarregar a página.
   setInterval(renderizarPedidos, 30000);
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
-// renderizarPedidos()
-// Aula 8: lia o array do localStorage e montava <li> com createElement.
-// Aula 9: busca via GET /pedidos (api.js) — mesma técnica de criação de
-//   elementos, mas os dados vêm do banco de dados real.
-//
-// Novidades em relação à Aula 8:
-//   ✦ pedido.status → badge colorido (CSS: .badge-pendente, .badge-preparo…)
-//   ✦ gerarBotaoStatus() → botão inline que avança o status na cozinha
-//   ✦ setInterval no DOMContentLoaded → painel se atualiza sozinho
-//   ✦ try/catch captura falha de rede e exibe mensagem de erro
-// ─────────────────────────────────────────────────────────────────────────────
 async function renderizarPedidos() {
   var lista = document.querySelector("#lista-pedidos");
   var spanTotal = document.querySelector("#valor-total");
@@ -25,7 +11,6 @@ async function renderizarPedidos() {
   if (!lista) return;
 
   try {
-    // buscarPedidos() no api.js — GET /pedidos
     var resposta = await buscarPedidos();
     var pedidos = resposta && resposta.dados ? resposta.dados : resposta;
     if (!Array.isArray(pedidos)) pedidos = [];
@@ -98,16 +83,6 @@ async function renderizarPedidos() {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// gerarBotaoStatus(pedidoId, statusAtual)
-// Retorna o HTML do botão que avança o status do pedido.
-// Define qual é o próximo status para cada estado atual — fluxo linear:
-//   pendente → preparo → pronto → entregue → (fim)
-//
-// Retorna HTML como string porque é chamada dentro de um innerHTML —
-// não pode usar addEventListener aqui. O onclick chama avancarStatus()
-// que está no escopo global (definida abaixo).
-// ─────────────────────────────────────────────────────────────────────────────
 function gerarBotaoStatus(pedidoId, statusAtual) {
   var proximo = {
     pendente: { label: "▶ Iniciar preparo", status: "preparo" },
@@ -130,12 +105,6 @@ function gerarBotaoStatus(pedidoId, statusAtual) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// avancarStatus(pedidoId, novoStatus)
-// Chamada pelo onclick do botão gerado em gerarBotaoStatus().
-// Envia PATCH /pedidos/:id/status via atualizarStatusPedido() do api.js,
-// depois re-renderiza o painel para refletir o novo estado.
-// ─────────────────────────────────────────────────────────────────────────────
 async function avancarStatus(pedidoId, novoStatus) {
   try {
     await atualizarStatusPedido(pedidoId, novoStatus);
